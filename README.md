@@ -1,90 +1,90 @@
-# Face Recognition App
+# Aplicación de Reconocimiento Facial
 
-An Android application built with Kotlin, Jetpack Compose, and modern Android libraries for face recognition using camera capture and API integration.
+Una aplicación Android construida con Kotlin, Jetpack Compose y librerías modernas de Android para reconocimiento facial usando la cámara y la integración con una API.
 
-## Features
+## Características
 
-- **Camera Integration**: Uses CameraX for camera preview and image capture
-- **Face Recognition**: Captures images and sends them to a backend API for face recognition
-- **Modern UI**: Built with Jetpack Compose and Material 3 design
-- **Dependency Injection**: Uses Hilt for clean dependency management
-- **Networking**: Retrofit for API communication
-- **Permission Handling**: Runtime camera permission requests using Accompanist Permissions
-- **Backend Health Check**: Test connection to Python backend before capturing images
+- **Integración con Cámara**: Usa CameraX para la vista previa y captura de imágenes
+- **Reconocimiento Facial**: Captura imágenes y las envía a una API backend para reconocimiento facial
+- **Interfaz Moderna**: Construida con Jetpack Compose y diseño Material 3
+- **Inyección de Dependencias**: Utiliza Hilt para una gestión limpia de dependencias
+- **Redes**: Retrofit para la comunicación con la API
+- **Manejo de Permisos**: Solicitud de permisos de cámara en tiempo de ejecución usando Accompanist Permissions
+- **Verificación de Salud del Backend**: Prueba la conexión con el backend en Python antes de capturar imágenes
 
-## Project Structure
+## Estructura del Proyecto
 
 ```
 app/src/main/java/com/facerecon/app/
 ├── data/
 │   ├── api/
-│   │   └── ApiService.kt          # Retrofit API service interface
+│   │   └── ApiService.kt          # Interfaz de servicio API con Retrofit
 │   ├── models/
-│   │   ├── User.kt                # User data model
-│   │   └── ApiResponse.kt         # API response models
+│   │   ├── User.kt                # Modelo de datos de usuario
+│   │   └── ApiResponse.kt         # Modelos de respuesta de la API
 │   └── repository/
-│       └── FaceRecognitionRepository.kt  # Repository for API calls
+│       └── FaceRecognitionRepository.kt  # Repositorio para llamadas a la API
 ├── di/
-│   └── NetworkModule.kt           # Hilt dependency injection module
+│   └── NetworkModule.kt           # Módulo de inyección de dependencias con Hilt
 ├── ui/
 │   ├── screens/
-│   │   └── CameraScreen.kt        # Main camera screen with preview
-│   ├── theme/                     # Compose theme definitions
+│   │   └── CameraScreen.kt        # Pantalla principal de cámara con vista previa
+│   ├── theme/                     # Definiciones de tema para Compose
 │   └── viewmodel/
-│       └── FaceRecognitionViewModel.kt  # ViewModel for state management
+│       └── FaceRecognitionViewModel.kt  # ViewModel para gestión de estado
 ├── utils/
-│   ├── CameraUtils.kt             # Camera utility functions
-│   └── NetworkConfig.kt           # Network configuration utility
-├── FaceRecognitionApplication.kt  # Hilt application class
-└── MainActivity.kt                # Main activity with Compose UI
+│   ├── CameraUtils.kt             # Funciones utilitarias de cámara
+│   └── NetworkConfig.kt           # Utilidad de configuración de red
+├── FaceRecognitionApplication.kt  # Clase de aplicación con Hilt
+└── MainActivity.kt                # Actividad principal con UI Compose
 ```
 
-## Setup
+## Configuración
 
-### 1. **Network Configuration**
+### 1. **Configuración de Red**
 
-The app is configured to connect to your Python backend. Update the configuration in `NetworkConfig.kt`:
+La app está configurada para conectarse a tu backend en Python. Actualiza la configuración en `NetworkConfig.kt`:
 
 ```kotlin
-// For Android Emulator - connects to localhost on host machine
-const val USE_EMULATOR = true  // Set to false for physical device
+// Para emulador de Android - conecta a localhost en la máquina anfitriona
+const val USE_EMULATOR = true  // Cambia a false para dispositivo físico
 
-// For Physical Device - update this to your PC's IP address
+// Para dispositivo físico - actualiza esto con la IP de tu PC
 private const val PHYSICAL_DEVICE_BASE_URL = "http://192.168.18.194:8000/"
 ```
 
-**For Android Emulator:**
-- Set `USE_EMULATOR = true`
-- Uses `http://10.0.2.2:8000/` (special Android emulator IP for localhost)
+**Para emulador de Android:**
+- Establece `USE_EMULATOR = true`
+- Usa `http://10.0.2.2:8000/` (IP especial del emulador para localhost)
 
-**For Physical Device:**
-- Set `USE_EMULATOR = false`
-- Update `PHYSICAL_DEVICE_BASE_URL` to your PC's actual IP address
-- Ensure both devices are on the same network
+**Para dispositivo físico:**
+- Establece `USE_EMULATOR = false`
+- Actualiza `PHYSICAL_DEVICE_BASE_URL` con la IP real de tu PC
+- Asegúrate de que ambos dispositivos estén en la misma red
 
-### 2. **Python Backend Requirements**
+### 2. **Requisitos del Backend en Python**
 
-Your Python backend should have these endpoints:
-- `GET /health` - Returns `{"status": "healthy", "message": "API funcionando correctamente"}`
-- `POST /recognize` - Accepts multipart form data with an image file
+Tu backend en Python debe tener estos endpoints:
+- `GET /health` - Devuelve `{"status": "healthy", "message": "API funcionando correctamente"}`
+- `POST /recognize` - Acepta datos multipart con un archivo de imagen
 
-### 3. **Build and Run**
+### 3. **Compilar y Ejecutar**
 
-The app is ready to build and run on Android devices/emulators
+La app está lista para compilarse y ejecutarse en dispositivos/emuladores Android
 
-## API Integration
+## Integración con la API
 
-The app expects a face recognition API with the following endpoints:
+La app espera una API de reconocimiento facial con los siguientes endpoints:
 
-### Health Check Endpoint:
-- `GET /health` - Returns backend status
-- Expected response: `{"status": "healthy", "message": "API funcionando correctamente"}`
+### Endpoint de Verificación de Salud:
+- `GET /health` - Devuelve el estado del backend
+- Respuesta esperada: `{"status": "healthy", "message": "API funcionando correctamente"}`
 
-### Recognition Endpoint:
-- `POST /recognize` - Accepts multipart form data with an image file
-- Returns JSON response with user recognition data
+### Endpoint de Reconocimiento:
+- `POST /recognize` - Acepta datos multipart con un archivo de imagen
+- Devuelve una respuesta JSON con los datos de reconocimiento de usuario
 
-### Expected API Response Format:
+### Formato de Respuesta Esperado de la API:
 ```json
 {
   "success": true,
@@ -93,59 +93,59 @@ The app expects a face recognition API with the following endpoints:
     "name": "John Doe",
     "confidence": 0.95
   },
-  "message": "Face recognized successfully"
+  "message": "Rostro reconocido exitosamente"
 }
 ```
 
-## Testing the Connection
+## Prueba de la Conexión
 
-1. **Launch the app** and grant camera permissions
-2. **Check Network Configuration** - The app shows which mode you're in
-3. **Test Backend Connection** - Tap "Test Backend Connection" to verify connectivity
-4. **Capture and Recognize** - Take a photo to test face recognition
+1. **Lanza la app** y concede permisos de cámara
+2. **Verifica la configuración de red** - La app muestra en qué modo estás
+3. **Prueba la conexión al backend** - Toca "Probar conexión con el backend" para verificar la conectividad
+4. **Captura y reconoce** - Toma una foto para probar el reconocimiento facial
 
-## Permissions
+## Permisos
 
-The app requires the following permissions:
-- `CAMERA` - For camera access
-- `INTERNET` - For API communication
-- `ACCESS_NETWORK_STATE` - For network state monitoring
+La app requiere los siguientes permisos:
+- `CAMERA` - Para acceso a la cámara
+- `INTERNET` - Para comunicación con la API
+- `ACCESS_NETWORK_STATE` - Para monitoreo del estado de red
 
-## Testing
+## Pruebas
 
-The project includes a basic UI test that verifies the main screen launches correctly:
-- `MainActivityTest.kt` - Tests that the camera permission screen displays
+El proyecto incluye una prueba básica de UI que verifica que la pantalla principal se lance correctamente:
+- `MainActivityTest.kt` - Prueba que se muestre la pantalla de permisos de cámara
 
-## Dependencies
+## Dependencias
 
-- **Jetpack Compose**: Modern UI toolkit
-- **CameraX**: Camera functionality
-- **Hilt**: Dependency injection
-- **Retrofit**: Network communication
-- **Accompanist Permissions**: Runtime permission handling
-- **Material 3**: Design system
+- **Jetpack Compose**: Toolkit moderno de UI
+- **CameraX**: Funcionalidad de cámara
+- **Hilt**: Inyección de dependencias
+- **Retrofit**: Comunicación de red
+- **Accompanist Permissions**: Manejo de permisos en tiempo de ejecución
+- **Material 3**: Sistema de diseño
 
-## Minimum Requirements
+## Requisitos Mínimos
 
-- Android API Level 24 (Android 7.0)
-- Target API Level 34 (Android 14)
+- Android API Nivel 24 (Android 7.0)
+- API objetivo Nivel 34 (Android 14)
 - Kotlin 1.9+
 - Java 17
 
-## Troubleshooting
+## Solución de Problemas
 
-### Connection Issues:
-1. **Emulator**: Ensure Python backend is running on `localhost:8000`
-2. **Physical Device**: 
-   - Check that both devices are on the same network
-   - Verify your PC's IP address is correct
-   - Ensure firewall allows connections on port 8000
+### Problemas de Conexión:
+1. **Emulador**: Asegúrate de que el backend en Python esté corriendo en `localhost:8000`
+2. **Dispositivo físico**: 
+   - Verifica que ambos dispositivos estén en la misma red
+   - Asegúrate de que la IP de tu PC sea correcta
+   - Verifica que el firewall permita conexiones en el puerto 8000
 
-### Camera Issues:
-1. Grant camera permissions when prompted
-2. Ensure device has a front camera (app uses front camera by default)
+### Problemas con la Cámara:
+1. Concede permisos de cámara cuando se soliciten
+2. Asegúrate de que el dispositivo tenga cámara frontal (la app usa la cámara frontal por defecto)
 
-### Backend Issues:
-1. Use the "Test Backend Connection" button to verify connectivity
-2. Check backend logs for any errors
-3. Ensure backend is running and accessible # face_recon_app
+### Problemas con el Backend:
+1. Usa el botón "Probar conexión con el backend" para verificar la conectividad
+2. Revisa los logs del backend para cualquier error
+3. Asegúrate de que el backend esté corriendo y accesible

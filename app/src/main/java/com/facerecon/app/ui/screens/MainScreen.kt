@@ -44,7 +44,7 @@ fun MainScreen(
         ) {
             // App Title
             Text(
-                text = "Face Recognition App",
+                text = "Aplicación de Reconocimiento Facial",
                 style = MaterialTheme.typography.headlineLarge,
                 textAlign = TextAlign.Center
             )
@@ -62,17 +62,17 @@ fun MainScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "🚨 SECURITY ALERT 🚨",
+                            text = "🚨 ALERTA DE SEGURIDAD 🚨",
                             style = MaterialTheme.typography.titleLarge,
                             color = Color.White
                         )
                         Text(
-                            text = "WANTED PERSON DETECTED",
+                            text = "PERSONA REQUISITORIADA DETECTADA",
                             style = MaterialTheme.typography.bodyLarge,
                             color = Color.White
                         )
                         Text(
-                            text = "Immediate action required. Contact authorities.",
+                            text = "Se requiere acción inmediata. Contacte a las autoridades.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.White
                         )
@@ -83,7 +83,7 @@ fun MainScreen(
                                 contentColor = MaterialTheme.colorScheme.error
                             )
                         ) {
-                            Text("Acknowledge Alert")
+                            Text("Reconocer alerta")
                         }
                     }
                 }
@@ -99,7 +99,7 @@ fun MainScreen(
                     .height(56.dp)
             ) {
                 Text(
-                    text = "Capture & Recognize",
+                    text = "Capturar y reconocer",
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -111,7 +111,7 @@ fun MainScreen(
                     .height(56.dp)
             ) {
                 Text(
-                    text = "User Management",
+                    text = "Gestión de usuarios",
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -123,7 +123,7 @@ fun MainScreen(
                     .height(56.dp)
             ) {
                 Text(
-                    text = "Register New User",
+                    text = "Registrar nuevo usuario",
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -138,23 +138,23 @@ fun MainScreen(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        text = "Backend Status",
+                        text = "Estado del backend",
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     
                     uiState.healthStatus?.let { health ->
                         Text(
-                            text = "Status: ${health["status"] ?: "Unknown"}",
+                            text = "Estado: ${health["status"] ?: "Desconocido"}",
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Text(
-                            text = "Message: ${health["message"] ?: "No message"}",
+                            text = "Mensaje: ${health["message"] ?: "Sin mensaje"}",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     } ?: run {
                         Text(
-                            text = "Status: Not checked",
+                            text = "Estado: No verificado",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
@@ -164,7 +164,7 @@ fun MainScreen(
                         onClick = { viewModel.checkBackendHealth() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Test Backend Connection")
+                        Text("Probar conexión con el backend")
                     }
                 }
             }
@@ -184,46 +184,46 @@ fun MainScreen(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "Recognition Result",
+                            text = "Resultado del reconocimiento",
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         
                         if (result.success && result.user != null) {
                             Text(
-                                text = "Recognized: ${result.user.fullName}",
+                                text = "Reconocido: ${result.user.fullName}",
                                 style = MaterialTheme.typography.bodyLarge
                             )
                             Text(
-                                text = "Email: ${result.user.email}",
+                                text = "Correo: ${result.user.email}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "Phone: ${result.user.telefono}",
+                                text = "Teléfono: ${result.user.telefono}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             result.user.confidence?.let { confidence ->
                                 Text(
-                                    text = "Confidence: ${(confidence * 100).toInt()}%",
+                                    text = "Confianza: ${(confidence * 100).toInt()}%",
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
                             result.distance?.let { distance ->
                                 Text(
-                                    text = "Distance: ${String.format("%.4f", distance)}",
+                                    text = "Distancia: ${String.format("%.4f", distance)}",
                                     style = MaterialTheme.typography.bodySmall
                                 )
                             }
                             if (result.user.isWanted) {
                                 Text(
-                                    text = "⚠️ WANTED PERSON - SECURITY ALERT",
+                                    text = "⚠️ PERSONA REQUISITORIADA - ALERTA DE SEGURIDAD",
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.error
                                 )
                             }
                         } else {
                             Text(
-                                text = result.message ?: "No face recognized",
+                                text = result.message ?: "No se reconoció ningún rostro",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }

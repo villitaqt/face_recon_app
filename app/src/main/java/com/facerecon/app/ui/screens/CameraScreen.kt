@@ -61,7 +61,7 @@ fun CameraScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Camera") },
+                    title = { Text("Cámara") },
                     navigationIcon = {
                         IconButton(onClick = onBackPressed) {
                             Text("←")
@@ -90,17 +90,17 @@ fun CameraScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "🚨 SECURITY ALERT 🚨",
+                                text = "🚨 ALERTA DE SEGURIDAD 🚨",
                                 style = MaterialTheme.typography.titleLarge,
                                 color = Color.White
                             )
                             Text(
-                                text = "WANTED PERSON DETECTED",
+                                text = "PERSONA REQUISITORIADA DETECTADA",
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Color.White
                             )
                             Text(
-                                text = "Immediate action required. Contact authorities.",
+                                text = "Se requiere acción inmediata. Contacte a las autoridades.",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Color.White
                             )
@@ -111,7 +111,7 @@ fun CameraScreen(
                                     contentColor = MaterialTheme.colorScheme.error
                                 )
                             ) {
-                                Text("Acknowledge Alert")
+                                Text("Reconocer alerta")
                             }
                         }
                     }
@@ -145,7 +145,7 @@ fun CameraScreen(
                                 .height(56.dp),
                             enabled = false // Disabled because capture is handled in CameraPreview
                         ) {
-                            Text("Tap camera preview to capture")
+                            Text("Toca la vista previa para capturar")
                         }
                         
                         Spacer(modifier = Modifier.height(16.dp))
@@ -167,46 +167,46 @@ fun CameraScreen(
                                     modifier = Modifier.padding(16.dp)
                                 ) {
                                     Text(
-                                        text = "Recognition Result",
+                                        text = "Resultado del reconocimiento",
                                         style = MaterialTheme.typography.titleMedium
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                     
                                     if (result.success && result.user != null) {
                                         Text(
-                                            text = "Recognized: ${result.user.fullName}",
+                                            text = "Reconocido: ${result.user.fullName}",
                                             style = MaterialTheme.typography.bodyLarge
                                         )
                                         Text(
-                                            text = "Email: ${result.user.email}",
+                                            text = "Correo: ${result.user.email}",
                                             style = MaterialTheme.typography.bodyMedium
                                         )
                                         Text(
-                                            text = "Phone: ${result.user.telefono}",
+                                            text = "Teléfono: ${result.user.telefono}",
                                             style = MaterialTheme.typography.bodyMedium
                                         )
                                         result.user.confidence?.let { confidence ->
                                             Text(
-                                                text = "Confidence: ${(confidence * 100).toInt()}%",
+                                                text = "Confianza: ${(confidence * 100).toInt()}%",
                                                 style = MaterialTheme.typography.bodyMedium
                                             )
                                         }
                                         result.distance?.let { distance ->
                                             Text(
-                                                text = "Distance: ${String.format("%.4f", distance)}",
+                                                text = "Distancia: ${String.format("%.4f", distance)}",
                                                 style = MaterialTheme.typography.bodySmall
                                             )
                                         }
                                         if (result.user.isWanted) {
                                             Text(
-                                                text = "⚠️ WANTED PERSON - SECURITY ALERT",
+                                                text = "⚠️ PERSONA REQUISITORIADA - ALERTA DE SEGURIDAD",
                                                 style = MaterialTheme.typography.bodyLarge,
                                                 color = MaterialTheme.colorScheme.error
                                             )
                                         }
                                     } else {
                                         Text(
-                                            text = result.message ?: "No face recognized",
+                                            text = result.message ?: "No se reconoció ningún rostro",
                                             style = MaterialTheme.typography.bodyMedium
                                         )
                                     }
@@ -253,7 +253,7 @@ fun CameraScreen(
                             verticalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = "Camera permission is required",
+                                text = "Se requiere permiso de cámara",
                                 style = MaterialTheme.typography.headlineSmall,
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
@@ -261,7 +261,7 @@ fun CameraScreen(
                             Button(
                                 onClick = { cameraPermissionState.launchPermissionRequest() }
                             ) {
-                                Text("Grant Permission")
+                                Text("Conceder permiso")
                             }
                         }
                     }

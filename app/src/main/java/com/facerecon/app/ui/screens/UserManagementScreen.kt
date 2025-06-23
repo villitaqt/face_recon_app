@@ -29,7 +29,7 @@ fun UserManagementScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("User Management") },
+                title = { Text("Gestión de usuarios") },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
                         Text("←")
@@ -64,13 +64,13 @@ fun UserManagementScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "No users found",
+                            text = "No se encontraron usuarios",
                             style = MaterialTheme.typography.headlineSmall,
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(onClick = onNavigateToRegister) {
-                            Text("Register First User")
+                            Text("Registrar primer usuario")
                         }
                     }
                 }
@@ -134,16 +134,16 @@ fun UserCard(
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = user.email ?: "No email",
+                        text = user.email ?: "Sin correo",
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = user.telefono ?: "No phone",
+                        text = user.telefono ?: "Sin teléfono",
                         style = MaterialTheme.typography.bodySmall
                     )
                     if (user.isWanted) {
                         Text(
-                            text = "⚠️ WANTED PERSON",
+                            text = "⚠️ PERSONA REQUISITORIADA",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.error
                         )
