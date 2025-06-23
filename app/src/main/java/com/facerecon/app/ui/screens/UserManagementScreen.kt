@@ -11,6 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.facerecon.app.ui.viewmodel.FaceRecognitionViewModel
+import com.facerecon.app.ui.components.UserImageWithFallback
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,43 +121,50 @@ fun UserCard(
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
+            // User Image
+            UserImageWithFallback(
+                imageUrl = user.urlFoto,
+                userName = user.fullName,
+                modifier = Modifier.padding(end = 16.dp),
+                size = 56
+            )
+            
+            // User Info
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = user.fullName,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = user.email ?: "Sin correo",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = user.telefono ?: "Sin teléfono",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                if (user.isWanted) {
                     Text(
-                        text = user.fullName,
-                        style = MaterialTheme.typography.titleMedium
+                        text = "⚠️ PERSONA REQUISITORIADA",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error
                     )
-                    Text(
-                        text = user.email ?: "Sin correo",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = user.telefono ?: "Sin teléfono",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                    if (user.isWanted) {
-                        Text(
-                            text = "⚠️ PERSONA REQUISITORIADA",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
                 }
-                
-                Row {
-                    IconButton(onClick = onEdit) {
-                        Text("✏️")
-                    }
-                    IconButton(onClick = onDelete) {
-                        Text("🗑️")
-                    }
+            }
+            
+            // Action Buttons
+            Row {
+                IconButton(onClick = onEdit) {
+                    Text("✏️")
+                }
+                IconButton(onClick = onDelete) {
+                    Text("🗑️")
                 }
             }
         }

@@ -11,6 +11,8 @@ Una aplicación Android construida con Kotlin, Jetpack Compose y librerías mode
 - **Redes**: Retrofit para la comunicación con la API
 - **Manejo de Permisos**: Solicitud de permisos de cámara en tiempo de ejecución usando Accompanist Permissions
 - **Verificación de Salud del Backend**: Prueba la conexión con el backend en Python antes de capturar imágenes
+- **Visualización de Imágenes**: Carga y muestra imágenes de usuarios desde el servidor usando Coil
+- **Gestión de Usuarios**: CRUD completo para usuarios con imágenes de perfil
 
 ## Estructura del Proyecto
 
@@ -27,8 +29,13 @@ app/src/main/java/com/facerecon/app/
 ├── di/
 │   └── NetworkModule.kt           # Módulo de inyección de dependencias con Hilt
 ├── ui/
+│   ├── components/
+│   │   └── UserImage.kt           # Componente reutilizable para imágenes de usuarios
 │   ├── screens/
-│   │   └── CameraScreen.kt        # Pantalla principal de cámara con vista previa
+│   │   ├── MainScreen.kt          # Pantalla principal
+│   │   ├── CameraScreen.kt        # Pantalla de cámara con vista previa
+│   │   ├── UserManagementScreen.kt # Gestión de usuarios
+│   │   └── UserRegistrationScreen.kt # Registro de usuarios
 │   ├── theme/                     # Definiciones de tema para Compose
 │   └── viewmodel/
 │       └── FaceRecognitionViewModel.kt  # ViewModel para gestión de estado
@@ -46,27 +53,41 @@ app/src/main/java/com/facerecon/app/
 La app está configurada para conectarse a tu backend en Python. Actualiza la configuración en `NetworkConfig.kt`:
 
 ```kotlin
-// Para emulador de Android - conecta a localhost en la máquina anfitriona
-const val USE_EMULATOR = true  // Cambia a false para dispositivo físico
+// Configuración para diferentes entornos
+const val ENVIRONMENT = "render" // Opciones: "emulator", "physical", "render"
 
-// Para dispositivo físico - actualiza esto con la IP de tu PC
+// Para emulador de Android - conecta a localhost en la máquina anfitriona
+private const val EMULATOR_BASE_URL = "http://10.0.2.2:8000/"
+
+// Para dispositivo físico - conecta a la IP de tu PC
 private const val PHYSICAL_DEVICE_BASE_URL = "http://192.168.18.194:8000/"
+
+// URL de producción - Despliegue en Render
+private const val RENDER_BASE_URL = "https://facerecon-api.onrender.com/"
 ```
 
 **Para emulador de Android:**
-- Establece `USE_EMULATOR = true`
+- Establece `ENVIRONMENT = "emulator"`
 - Usa `http://10.0.2.2:8000/` (IP especial del emulador para localhost)
 
 **Para dispositivo físico:**
-- Establece `USE_EMULATOR = false`
+- Establece `ENVIRONMENT = "physical"`
 - Actualiza `PHYSICAL_DEVICE_BASE_URL` con la IP real de tu PC
 - Asegúrate de que ambos dispositivos estén en la misma red
+
+**Para producción (Render):**
+- Establece `ENVIRONMENT = "render"`
+- Usa `https://facerecon-api.onrender.com/` (URL de producción)
 
 ### 2. **Requisitos del Backend en Python**
 
 Tu backend en Python debe tener estos endpoints:
 - `GET /health` - Devuelve `{"status": "healthy", "message": "API funcionando correctamente"}`
 - `POST /recognize` - Acepta datos multipart con un archivo de imagen
+- `GET /usuarios/` - Lista todos los usuarios
+- `POST /usuarios/` - Registra un nuevo usuario
+- `PUT /usuarios/{id}` - Actualiza un usuario
+- `DELETE /usuarios/{id}` - Elimina un usuario
 
 ### 3. **Compilar y Ejecutar**
 
@@ -84,18 +105,53 @@ La app espera una API de reconocimiento facial con los siguientes endpoints:
 - `POST /recognize` - Acepta datos multipart con un archivo de imagen
 - Devuelve una respuesta JSON con los datos de reconocimiento de usuario
 
+### Endpoints de Gestión de Usuarios:
+- `GET /usuarios/` - Lista todos los usuarios
+- `GET /usuarios/{id}` - Obtiene un usuario específico
+- `POST /usuarios/` - Registra un nuevo usuario
+- `PUT /usuarios/{id}` - Actualiza un usuario
+- `DELETE /usuarios/{id}` - Elimina un usuario
+
 ### Formato de Respuesta Esperado de la API:
 ```json
 {
   "success": true,
   "user": {
     "id": "user123",
-    "name": "John Doe",
+    "nombre": "John",
+    "apellido": "Doe",
+    "email": "john@example.com",
+    "telefono": "123456789",
+    "requisitoriado": false,
+    "url_foto": "uploads/user_123.jpg",
     "confidence": 0.95
   },
   "message": "Rostro reconocido exitosamente"
 }
 ```
+
+## Visualización de Imágenes de Usuarios
+
+### Carga de Imágenes
+La app utiliza Coil para cargar imágenes desde el servidor. Las imágenes se construyen concatenando la URL base con el campo `url_foto` de la respuesta de la API:
+
+```kotlin
+// Ejemplo de construcción de URL de imagen
+val completeImageUrl = NetworkConfig.buildImageUrl(user.urlFoto)
+// Resultado: https://facerecon-api.onrender.com/uploads/user_123.jpg
+```
+
+### Componente de Imagen de Usuario
+Se incluye un componente reutilizable `UserImageWithFallback` que:
+- Carga la imagen del usuario desde el servidor
+- Muestra las iniciales del usuario si no hay imagen
+- Maneja errores de carga mostrando un fallback
+- Es circular y responsive
+
+### Manejo de Errores
+- Si la imagen no existe, se muestran las iniciales del usuario
+- Si hay error de red, se muestra un placeholder
+- Las imágenes se cachean automáticamente por Coil
 
 ## Prueba de la Conexión
 
@@ -103,6 +159,7 @@ La app espera una API de reconocimiento facial con los siguientes endpoints:
 2. **Verifica la configuración de red** - La app muestra en qué modo estás
 3. **Prueba la conexión al backend** - Toca "Probar conexión con el backend" para verificar la conectividad
 4. **Captura y reconoce** - Toma una foto para probar el reconocimiento facial
+5. **Gestiona usuarios** - Registra y gestiona usuarios con imágenes de perfil
 
 ## Permisos
 
@@ -122,6 +179,7 @@ El proyecto incluye una prueba básica de UI que verifica que la pantalla princi
 - **CameraX**: Funcionalidad de cámara
 - **Hilt**: Inyección de dependencias
 - **Retrofit**: Comunicación de red
+- **Coil**: Carga de imágenes desde la red
 - **Accompanist Permissions**: Manejo de permisos en tiempo de ejecución
 - **Material 3**: Sistema de diseño
 
@@ -140,10 +198,18 @@ El proyecto incluye una prueba básica de UI que verifica que la pantalla princi
    - Verifica que ambos dispositivos estén en la misma red
    - Asegúrate de que la IP de tu PC sea correcta
    - Verifica que el firewall permita conexiones en el puerto 8000
+3. **Render**: 
+   - Verifica que el servicio esté activo en Render
+   - Revisa los logs del servicio para errores
 
 ### Problemas con la Cámara:
 1. Concede permisos de cámara cuando se soliciten
 2. Asegúrate de que el dispositivo tenga cámara frontal (la app usa la cámara frontal por defecto)
+
+### Problemas con Imágenes:
+1. Verifica que las URLs de las imágenes sean correctas
+2. Asegúrate de que el servidor esté sirviendo las imágenes correctamente
+3. Revisa la conectividad de red para la carga de imágenes
 
 ### Problemas con el Backend:
 1. Usa el botón "Probar conexión con el backend" para verificar la conectividad

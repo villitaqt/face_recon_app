@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.facerecon.app.ui.viewmodel.FaceRecognitionViewModel
+import com.facerecon.app.ui.components.UserImageWithFallback
 
 @Composable
 fun MainScreen(
@@ -190,18 +191,36 @@ fun MainScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         
                         if (result.success && result.user != null) {
-                            Text(
-                                text = "Reconocido: ${result.user.fullName}",
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                            Text(
-                                text = "Correo: ${result.user.email}",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Text(
-                                text = "Teléfono: ${result.user.telefono}",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                            // User Image and Info Row
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                UserImageWithFallback(
+                                    imageUrl = result.user.urlFoto,
+                                    userName = result.user.fullName,
+                                    modifier = Modifier.padding(end = 16.dp),
+                                    size = 64
+                                )
+                                
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = "Reconocido: ${result.user.fullName}",
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                                    Text(
+                                        text = "Correo: ${result.user.email}",
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                    Text(
+                                        text = "Teléfono: ${result.user.telefono}",
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                            }
+                            
+                            Spacer(modifier = Modifier.height(8.dp))
+                            
                             result.user.confidence?.let { confidence ->
                                 Text(
                                     text = "Confianza: ${(confidence * 100).toInt()}%",
