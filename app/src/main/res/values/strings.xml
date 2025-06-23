@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FaceRecognitionApp</string>
+    <string name="camera_permission_required">Camera permission is required</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="capture_and_recognize">Capture &amp; Recognize</string>
+    <string name="recognized_user">Recognized: %s</string>
+    <string name="confidence_percentage">Confidence: %d%%</string>
+    <string name="no_face_recognized">No face recognized</string>
+</resources>
