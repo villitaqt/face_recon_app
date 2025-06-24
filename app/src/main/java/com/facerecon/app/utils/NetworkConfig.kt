@@ -3,7 +3,7 @@ package com.facerecon.app.utils
 object NetworkConfig {
     // Configuration for different environments
     // Set this to true for emulator, false for physical device, "render" for production
-    const val ENVIRONMENT = "render" // Options: "emulator", "physical", "render"
+    const val ENVIRONMENT = AppConfig.CURRENT_ENVIRONMENT // Options: "emulator", "physical", "render"
     
     // For Android Emulator - connects to localhost on host machine
     private const val EMULATOR_BASE_URL = "http://10.0.2.2:8000/"
@@ -16,21 +16,11 @@ object NetworkConfig {
     private const val RENDER_BASE_URL = "https://facerecon-api.onrender.com/"
     
     fun getBaseUrl(): String {
-        return when (ENVIRONMENT) {
-            "emulator" -> EMULATOR_BASE_URL
-            "physical" -> PHYSICAL_DEVICE_BASE_URL
-            "render" -> RENDER_BASE_URL
-            else -> RENDER_BASE_URL // Default to Render
-        }
+        return AppConfig.getBaseUrl()
     }
     
     fun getCurrentConfig(): String {
-        return when (ENVIRONMENT) {
-            "emulator" -> "Emulator Mode - Connecting to: $EMULATOR_BASE_URL"
-            "physical" -> "Physical Device Mode - Connecting to: $PHYSICAL_DEVICE_BASE_URL"
-            "render" -> "Production Mode - Connecting to: $RENDER_BASE_URL"
-            else -> "Production Mode - Connecting to: $RENDER_BASE_URL"
-        }
+        return "${AppConfig.getEnvironmentName()} - Connecting to: ${getBaseUrl()}"
     }
     
     /**

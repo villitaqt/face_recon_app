@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.activity.compose.BackHandler
 import com.facerecon.app.ui.viewmodel.FaceRecognitionViewModel
 import com.facerecon.app.ui.components.UserImageWithFallback
 
@@ -27,6 +28,11 @@ fun UserManagementScreen(
         viewModel.loadAllUsers()
     }
     
+    // Handle back button press
+    BackHandler {
+        onBackPressed()
+    }
+    
     Scaffold(
         topBar = {
             TopAppBar(
@@ -40,7 +46,8 @@ fun UserManagementScreen(
                     IconButton(onClick = onNavigateToRegister) {
                         Text("+")
                     }
-                }
+                },
+                modifier = Modifier.padding(top = 8.dp)
             )
         }
     ) { paddingValues ->
@@ -48,6 +55,7 @@ fun UserManagementScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .padding(top = 8.dp)
         ) {
             if (uiState.isLoading) {
                 Box(
@@ -78,8 +86,8 @@ fun UserManagementScreen(
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    contentPadding = PaddingValues(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     items(uiState.users) { user ->
                         UserCard(
@@ -96,14 +104,14 @@ fun UserManagementScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(8.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.errorContainer
                     )
                 ) {
                     Text(
                         text = error,
-                        modifier = Modifier.padding(16.dp),
+                        modifier = Modifier.padding(12.dp),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -124,7 +132,7 @@ fun UserCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // User Image

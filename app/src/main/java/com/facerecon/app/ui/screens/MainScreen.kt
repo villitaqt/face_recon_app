@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.facerecon.app.ui.viewmodel.FaceRecognitionViewModel
 import com.facerecon.app.ui.components.UserImageWithFallback
+import com.facerecon.app.utils.AppConfig
 
 @Composable
 fun MainScreen(
@@ -39,16 +40,40 @@ fun MainScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(top = 48.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             // App Title
             Text(
-                text = "Aplicación de Reconocimiento Facial",
+                text = AppConfig.getAppName(),
                 style = MaterialTheme.typography.headlineLarge,
                 textAlign = TextAlign.Center
             )
+            
+            // Environment Info
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Entorno: ${AppConfig.getEnvironmentName()}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                    Text(
+                        text = "API: ${AppConfig.getBaseUrl()}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
+            }
             
             // Alert Banner for Wanted Persons
             if (uiState.alertTriggered) {
@@ -59,7 +84,7 @@ fun MainScreen(
                     )
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp),
+                        modifier = Modifier.padding(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -90,7 +115,7 @@ fun MainScreen(
                 }
             }
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             
             // Main Action Buttons
             Button(
@@ -129,14 +154,14 @@ fun MainScreen(
                 )
             }
             
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             
             // Backend Status Card
             Card(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(12.dp)
                 ) {
                     Text(
                         text = "Estado del backend",
@@ -182,7 +207,7 @@ fun MainScreen(
                     )
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(12.dp)
                     ) {
                         Text(
                             text = "Resultado del reconocimiento",
@@ -260,7 +285,7 @@ fun MainScreen(
                 ) {
                     Text(
                         text = error,
-                        modifier = Modifier.padding(16.dp),
+                        modifier = Modifier.padding(12.dp),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

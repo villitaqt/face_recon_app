@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import coil.request.ImageRequest
 import com.facerecon.app.R
 import com.facerecon.app.utils.NetworkConfig
@@ -60,13 +61,7 @@ fun UserImage(
                     .build(),
                 contentDescription = contentDescription ?: "Imagen de usuario",
                 modifier = modifier.clip(CircleShape),
-                contentScale = ContentScale.Crop,
-                onError = {
-                    // Handle error by showing placeholder
-                    if (showPlaceholder) {
-                        // This will be handled by the error state
-                    }
-                }
+                contentScale = ContentScale.Crop
             )
         } else {
             // Show placeholder if URL building failed
@@ -97,9 +92,10 @@ fun UserImageWithFallback(
     size: Int = 48
 ) {
     val context = LocalContext.current
+    var imageLoadError by remember { mutableStateOf(false) }
     
-    if (imageUrl.isNullOrBlank()) {
-        // Show initials when no image
+    if (imageUrl.isNullOrBlank() || imageLoadError) {
+        // Show initials when no image or on error
         Box(
             modifier = modifier
                 .size(size.dp)
@@ -115,7 +111,7 @@ fun UserImageWithFallback(
             )
         }
     } else {
-        // Try to load image with fallback
+        // Try to load image
         val completeImageUrl = NetworkConfig.buildImageUrl(imageUrl)
         
         if (completeImageUrl != null) {
@@ -129,40 +125,24 @@ fun UserImageWithFallback(
                     .size(size.dp)
                     .clip(CircleShape),
                 contentScale = ContentScale.Crop,
-                onError = {
-                    // Show initials on error
-                    Box(
-                        modifier = modifier
-                            .size(size.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = getInitials(userName),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center
-                        )
+                onState = { state ->
+                    // Handle loading state and errors
+                    when (state) {
+                        is AsyncImagePainter.State.Error -> {
+                            imageLoadError = true
+                        }
+                        is AsyncImagePainter.State.Success -> {
+                            imageLoadError = false
+                        }
+                        else -> {
+                            // Loading state, do nothing
+                        }
                     }
                 }
             )
         } else {
             // Show initials if URL building failed
-            Box(
-                modifier = modifier
-                    .size(size.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = getInitials(userName),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center
-                )
-            }
+            imageLoadError = true
         }
     }
 }

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.activity.compose.BackHandler
 import com.facerecon.app.ui.viewmodel.FaceRecognitionViewModel
 import com.facerecon.app.utils.CameraUtils.toBitmap
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -52,6 +53,11 @@ fun UserRegistrationScreen(
         }
     }
     
+    // Handle back button press
+    BackHandler {
+        onNavigateBack()
+    }
+    
     if (showCamera) {
         RegistrationCameraPreview(
             onImageCaptured = { bitmap ->
@@ -70,14 +76,14 @@ fun UserRegistrationScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(top = 48.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Registro de Usuario",
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(bottom = 24.dp)
+                modifier = Modifier.padding(bottom = 16.dp)
             )
             
             OutlinedTextField(
@@ -86,7 +92,7 @@ fun UserRegistrationScreen(
                 label = { Text("Nombre") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 12.dp)
             )
             
             OutlinedTextField(
@@ -95,7 +101,7 @@ fun UserRegistrationScreen(
                 label = { Text("Apellido") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 12.dp)
             )
             
             OutlinedTextField(
@@ -104,7 +110,7 @@ fun UserRegistrationScreen(
                 label = { Text("Email") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 12.dp)
             )
             
             OutlinedTextField(
@@ -113,13 +119,13 @@ fun UserRegistrationScreen(
                 label = { Text("Teléfono") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 12.dp)
             )
             
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
@@ -133,7 +139,7 @@ fun UserRegistrationScreen(
                 onClick = { showCamera = true },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 12.dp)
             ) {
                 Text("📷 Capturar Foto")
             }
@@ -141,7 +147,7 @@ fun UserRegistrationScreen(
             if (capturedImage != null) {
                 Text(
                     text = "✅ Foto capturada",
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = 12.dp)
                 )
             }
             
@@ -154,7 +160,7 @@ fun UserRegistrationScreen(
                 enabled = nombre.isNotBlank() && apellido.isNotBlank() && email.isNotBlank() && telefono.isNotBlank() && capturedImage != null && !uiState.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 12.dp)
             ) {
                 if (uiState.isLoading) {
                     CircularProgressIndicator(

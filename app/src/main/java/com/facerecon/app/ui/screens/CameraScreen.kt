@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.activity.compose.BackHandler
 import com.facerecon.app.ui.viewmodel.FaceRecognitionViewModel
 import com.facerecon.app.ui.components.UserImageWithFallback
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -54,6 +55,11 @@ fun CameraScreen(
         }
     }
     
+    // Handle back button press
+    BackHandler {
+        onBackPressed()
+    }
+    
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +73,8 @@ fun CameraScreen(
                         IconButton(onClick = onBackPressed) {
                             Text("←")
                         }
-                    }
+                    },
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
         ) { paddingValues ->
@@ -75,19 +82,20 @@ fun CameraScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
+                    .padding(top = 8.dp)
             ) {
                 // Alert Banner for Wanted Persons
                 if (uiState.alertTriggered) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(8.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.error
                         )
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp),
+                            modifier = Modifier.padding(12.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
@@ -125,7 +133,7 @@ fun CameraScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(400.dp)
-                                .padding(16.dp)
+                                .padding(8.dp)
                         ) {
                             CameraPreview(
                                 onImageCaptured = { bitmap ->
@@ -142,21 +150,21 @@ fun CameraScreen(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
+                                .padding(horizontal = 8.dp)
                                 .height(56.dp),
                             enabled = false // Disabled because capture is handled in CameraPreview
                         ) {
                             Text("Toca la vista previa para capturar")
                         }
                         
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                         
                         // Enhanced Recognition Result Display
                         uiState.recognitionResult?.let { result ->
                             Card(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
+                                    .padding(horizontal = 8.dp),
                                 colors = CardDefaults.cardColors(
                                     containerColor = if (result.alertTriggered || result.user?.isWanted == true) 
                                         MaterialTheme.colorScheme.errorContainer 
@@ -165,7 +173,7 @@ fun CameraScreen(
                                 )
                             ) {
                                 Column(
-                                    modifier = Modifier.padding(16.dp)
+                                    modifier = Modifier.padding(12.dp)
                                 ) {
                                     Text(
                                         text = "Resultado del reconocimiento",

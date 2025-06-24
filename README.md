@@ -1,3 +1,96 @@
+# FaceRecon App
+
+Aplicación de reconocimiento facial con soporte para múltiples entornos.
+
+## 🚀 Versiones Disponibles
+
+### 📱 Versión de Desarrollo (DEV)
+- **API**: Local (192.168.18.194:8000)
+- **Nombre**: FaceRecon DEV
+- **ID**: `com.facerecon.app.dev`
+- **Uso**: Para desarrollo y pruebas locales
+
+### 🌐 Versión de Producción (PROD)
+- **API**: Render (https://facerecon-api.onrender.com/)
+- **Nombre**: FaceRecon
+- **ID**: `com.facerecon.app.prod`
+- **Uso**: Para distribución y uso en producción
+
+## 🛠️ Construcción
+
+### Usando el script automático:
+```powershell
+# Construir versión de desarrollo
+.\switch-env.ps1 dev
+
+# Construir versión de producción
+.\switch-env.ps1 prod
+```
+
+### Usando Gradle directamente:
+```bash
+# Versión de desarrollo
+./gradlew assembleDevDebug
+
+# Versión de producción
+./gradlew assembleProdDebug
+```
+
+## 📦 Instalación
+
+### Instalar ambas versiones en el mismo dispositivo:
+```bash
+# Instalar versión de desarrollo
+adb install app/build/outputs/apk/dev/debug/app-dev-debug.apk
+
+# Instalar versión de producción
+adb install app/build/outputs/apk/prod/debug/app-prod-debug.apk
+```
+
+## 🔧 Configuración
+
+### Estructura de archivos:
+```
+app/src/
+├── main/          # Código común
+├── dev/           # Configuración de desarrollo
+└── prod/          # Configuración de producción
+```
+
+### Diferencias entre versiones:
+- **DEV**: Usa API local, nombre "FaceRecon DEV"
+- **PROD**: Usa API de Render, nombre "FaceRecon"
+
+## 📱 Características
+
+- ✅ Reconocimiento facial en tiempo real
+- ✅ Gestión de usuarios
+- ✅ Registro de nuevos usuarios
+- ✅ Detección de personas requisitoriadas
+- ✅ Interfaz moderna con Material Design 3
+- ✅ Soporte para múltiples entornos
+- ✅ Navegación intuitiva
+
+## 🎯 Uso
+
+1. **Desarrollo**: Usa la versión DEV para probar con tu API local
+2. **Producción**: Usa la versión PROD para distribución final
+3. **Coexistencia**: Ambas versiones pueden estar instaladas simultáneamente
+
+## 🔄 Actualización
+
+Para actualizar la configuración de IP en desarrollo:
+1. Edita `app/src/dev/java/com/facerecon/app/utils/AppConfig.kt`
+2. Cambia `PHYSICAL_URL` a tu nueva IP
+3. Reconstruye: `.\switch-env.ps1 dev`
+
+## 📋 Requisitos
+
+- Android Studio Hedgehog | 2023.1.1
+- Kotlin 1.9.0+
+- Android SDK 34
+- Dispositivo Android con cámara
+
 # Aplicación de Reconocimiento Facial
 
 Una aplicación Android construida con Kotlin, Jetpack Compose y librerías modernas de Android para reconocimiento facial usando la cámara y la integración con una API.

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -21,6 +22,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        // Handle back button press
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // This will be handled by the navigation stack in AppContent
+                // The back navigation is managed by each screen's onBackPressed callback
+            }
+        })
+        
         setContent {
             FaceRecognitionAppTheme {
                 AppContent()
@@ -31,48 +41,56 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppContent() {
-    var currentScreen by remember { mutableStateOf<Screen>(Screen.Main) }
+    var navigationStack by remember { mutableStateOf(listOf<Screen>(Screen.Main)) }
     var selectedUserId by remember { mutableStateOf<String?>(null) }
+    
+    // Handle back navigation
+    val currentScreen = navigationStack.lastOrNull() ?: Screen.Main
+    
+    // Back press handling
+    LaunchedEffect(Unit) {
+        // This will be handled by the individual screens
+    }
     
     when (currentScreen) {
         Screen.Main -> {
             MainScreen(
                 onNavigateToCamera = {
-                    currentScreen = Screen.Camera
+                    navigationStack = navigationStack + Screen.Camera
                 },
                 onNavigateToUserManagement = {
-                    currentScreen = Screen.UserManagement
+                    navigationStack = navigationStack + Screen.UserManagement
                 },
                 onNavigateToUserRegistration = {
-                    currentScreen = Screen.UserRegistration
+                    navigationStack = navigationStack + Screen.UserRegistration
                 }
             )
         }
         Screen.Camera -> {
             CameraScreen(
                 onBackPressed = {
-                    currentScreen = Screen.Main
+                    navigationStack = navigationStack.dropLast(1)
                 }
             )
         }
         Screen.UserManagement -> {
             UserManagementScreen(
                 onNavigateToRegister = {
-                    currentScreen = Screen.UserRegistration
+                    navigationStack = navigationStack + Screen.UserRegistration
                 },
                 onNavigateToEdit = { userId ->
                     selectedUserId = userId
-                    currentScreen = Screen.UserRegistration
+                    navigationStack = navigationStack + Screen.UserRegistration
                 },
                 onBackPressed = {
-                    currentScreen = Screen.Main
+                    navigationStack = navigationStack.dropLast(1)
                 }
             )
         }
         Screen.UserRegistration -> {
             UserRegistrationScreen(
                 onNavigateBack = {
-                    currentScreen = Screen.Main
+                    navigationStack = navigationStack.dropLast(1)
                 }
             )
         }
